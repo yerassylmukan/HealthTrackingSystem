@@ -21,20 +21,19 @@ public class AuthController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var result = await _authService.RegisterAsync(userModel.Username, userModel.Password, userModel.Name,
-            userModel.Age, userModel.Weight, userModel.Height, userModel.Goal);
+        var result = await _authService.RegisterAsync(userModel);
 
         if (result.IsFailure) return BadRequest(result.Error);
 
         return Ok(result.Value);
     }
 
-        [HttpPost]
+    [HttpPost]
     public async Task<ActionResult<string>> Login([FromBody] UserLoginModel userModel)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var result = await _authService.LoginAsync(userModel.Username, userModel.Password);
+        var result = await _authService.LoginAsync(userModel);
 
         if (result.IsFailure) return BadRequest(result.Error);
 

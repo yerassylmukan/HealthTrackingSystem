@@ -17,12 +17,8 @@ public static class ApplicationDbContextSeed
         var roles = new[] { "Admin", "User" };
 
         foreach (var role in roles)
-        {
             if (!await roleManager.RoleExistsAsync(role))
-            {
                 await roleManager.CreateAsync(new IdentityRole(role));
-            }
-        }
 
         var adminEmail = "admin@gmail.com";
         if (await userManager.FindByEmailAsync(adminEmail) is null)

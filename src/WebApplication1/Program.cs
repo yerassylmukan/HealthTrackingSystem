@@ -25,6 +25,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserRegisterModelValidator>());
 
+builder.Services.AddLogging();
+
 var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
 builder.Services.AddAuthentication(config => { config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
     .AddJwtBearer(config =>
@@ -84,6 +86,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ITokenClaimService, IdentityTokenClaimService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IHealthService, HealthService>();
+builder.Services.AddScoped<IAdviceService, AdviceService>();
 
 var app = builder.Build();
 
@@ -107,7 +111,5 @@ app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"); });
 
 app.MapControllers();
-
-app.Run();
 
 app.Run();

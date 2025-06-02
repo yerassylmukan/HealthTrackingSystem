@@ -1,9 +1,10 @@
-﻿namespace WebApplication1.Common.Contracts;
+﻿using WebApplication1.Models;
+
+namespace WebApplication1.Common.Contracts;
 
 public interface IAuthService
 {
-    Task<Result<string>> RegisterAsync(string userName, string password, string name, int age, float weight,
-        float height, string goal);
+    Task<Result<string>> RegisterAsync(UserRegisterModel model);
 
-    Task<Result<string>> LoginAsync(string userName, string password);
+    Task<Result<string>> LoginAsync(UserLoginModel model);
 }
