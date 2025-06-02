@@ -663,6 +663,18 @@
 
     function logout() {
         clearToken();
+
+        document.getElementById('todayCalories').textContent = '';
+        document.getElementById('todaySteps').textContent = '';
+        document.getElementById('todaySleep').textContent = '';
+        document.getElementById('todayMood').textContent = '';
+        document.getElementById('adviceContent').innerHTML = '';
+
+        const healthForm = document.getElementById('healthEntryForm');
+        if (healthForm) healthForm.reset();
+
+        localStorage.removeItem("dailyHealthData");
+
         showAuth();
         showMessage('You have been logged out.', 'success');
     }
