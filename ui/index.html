@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health & Fitness Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .health-entry {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .health-entry h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .advice-section {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .advice-content {
+            font-size: 18px;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .auth-form {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <span>💪</span> HealthFit
+        </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span id="userName">Welcome!</span>
+            <button class="btn btn-secondary" onclick="logout()">
+                <span>🚪</span> Logout
+            </button>
+        </div>
+    </div>
+
+    <div id="authContainer" class="auth-container">
+        <div class="auth-form">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Welcome to HealthFit</h2>
+
+            <div id="messageContainer"></div>
+
+            <div id="loginForm">
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">
+                        <span>🔑</span> Login
+                    </button>
+                </form>
+                <p style="text-align: center;">
+                    Don't have an account?
+                    <a href="#" onclick="showRegisterForm()" style="color: #667eea; text-decoration: none;">Sign up</a>
+                </p>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="regName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" id="regAge" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Weight (kg)</label>
+                            <input type="number" step="0.1" id="regWeight" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Height (cm)</label>
+                            <input type="number" step="0.1" id="regHeight" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Goal</label>
+                        <input type="text" id="regGoal" placeholder="e.g., Lose weight, build muscle...">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 15px;">
+                        <span>📝</span> Register
+                    </button>
+                </form>
+                <p style="text-align: center;">
+                    Already have an account?
+                    <a href="#" onclick="showLoginForm()" style="color: #667eea; text-decoration: none;">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="todayCalories">0</div>
+                <div class="stat-label">Calories Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👟</div>
+                <div class="stat-value" id="todaySteps">0</div>
+                <div class="stat-label">Steps Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">😴</div>
+                <div class="stat-value" id="todaySleep">0</div>
+                <div class="stat-label">Hours of Sleep</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">😊</div>
+                <div class="stat-value" id="todayMood">-</div>
+                <div class="stat-label">Mood Today</div>
+            </div>
+        </div>
+
+        <div class="health-entry">
+            <h3>📊 Log Today's Health Data</h3>
+            <div id="entryMessage"></div>
+            <form onsubmit="handleHealthEntry(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Calories</label>
+                        <input type="number" id="calories" placeholder="2000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Steps</label>
+                        <input type="number" id="steps" placeholder="8000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sleep Hours</label>
+                        <input type="number" step="0.5" id="sleepHours" placeholder="7.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mood</label>
+                        <select id="mood" required>
+                            <option value="">Select mood</option>
+                            <option value="Excellent">😄 Excellent</option>
+                            <option value="Good">😊 Good</option>
+                            <option value="Okay">😐 Okay</option>
+                            <option value="Tired">😴 Tired</option>
+                            <option value="Stressed">😤 Stressed</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span>💾</span> Save Entry
+                </button>
+            </form>
+        </div>
+
+        <div class="advice-section">
+            <h3 style="margin-bottom: 20px;">💡 Daily Health Tip</h3>
+            <div id="adviceContent" class="advice-content">
+                <div class="loading">Loading your personalized advice...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = "http://localhost:5000/api";
+    
+    function getToken() {
+        return localStorage.getItem("token");
+    }
+
+    function setToken(token) {
+        localStorage.setItem("token", token);
+    }
+
+    function clearToken() {
+        localStorage.removeItem("token");
+    }
+
+    async function handleResponse(res) {
+        if (!res.ok) {
+            const contentType = res.headers.get("content-type");
+            const errorData = contentType?.includes("application/json") ? await res.json() : await res.text();
+            throw {
+                status: res.status,
+                statusText: res.statusText,
+                body: errorData
+            };
+        }
+        return res;
+    }
+
+    async function registerUser(userData) {
+        try {
+            const res = await fetch(`${API_BASE}/Auth/Register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+
+            const response = await handleResponse(res);
+            const token = await response.text();
+            setToken(token);
+            return token;
+        } catch (err) {
+            console.error("Registration failed:", err);
+            throw err;
+        }
+    }
+
+    async function loginUser(credentials) {
+        try {
+            const res = await fetch(`${API_BASE}/Auth/Login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credentials)
+            });
+
+            const response = await handleResponse(res);
+            const token = await response.text();
+            setToken(token);
+            return token;
+        } catch (err) {
+            console.error("Login failed:", err);
+            throw err;
+        }
+    }
+
+    async function getAdvice() {
+        try {
+            const res = await fetch(`${API_BASE}/Advice/GetAdvice`, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            });
+
+            const response = await handleResponse(res);
+            return await response.json();
+        } catch (err) {
+            console.error("Failed to fetch advice:", err);
+            throw err;
+        }
+    }
+
+    async function saveHealthEntry(entry) {
+        try {
+            const res = await fetch(`${API_BASE}/Health/Save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${getToken()}`
+                },
+                body: JSON.stringify(entry)
+            });
+
+            const response = await handleResponse(res);
+
+            const contentType = response.headers.get("content-type");
+            if (response.status === 204 || !contentType?.includes("application/json")) {
+                return { success: true };
+            }
+
+            return await response.json();
+        } catch (err) {
+            console.error("Failed to save health entry:", err);
+            throw err;
+        }
+    }
+
+    async function getDailyHealthData() {
+        try {
+            const res = await fetch(`${API_BASE}/Health/GetDailyData`, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            });
+
+            const response = await handleResponse(res);
+            return await response.json();
+        } catch (err) {
+            console.error("Failed to get daily health data:", err);
+            throw err;
+        }
+    }
+    function showMessage(message, type = 'success') {
+        const containers = ['messageContainer', 'entryMessage'];
+        containers.forEach(containerId => {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `<div class="message ${type}">${message}</div>`;
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 5000);
+            }
+        });
+    }
+
+    function showLoginForm() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('registerForm').classList.add('hidden');
+    }
+
+    function showRegisterForm() {
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('loginForm').classList.add('hidden');
+    }
+
+    function showDashboard() {
+        document.getElementById('authContainer').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userInfo').style.display = 'flex';
+        loadDashboardData();
+    }
+
+    function showAuth() {
+        document.getElementById('authContainer').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('userInfo').style.display = 'none';
+    }
+    
+    async function handleLogin(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            const token = await loginUser({ username, password });
+            showMessage('Login successful!', 'success');
+            document.getElementById('userName').textContent = `Welcome, ${username}!`;
+            setTimeout(showDashboard, 1000);
+        } catch (error) {
+            showMessage('Login failed. Please check your credentials.', 'error');
+        }
+    }
+
+    async function handleRegister(event) {
+        event.preventDefault();
+
+        const userData = {
+            username: document.getElementById('regUsername').value,
+            password: document.getElementById('regPassword').value,
+            name: document.getElementById('regName').value,
+            age: parseInt(document.getElementById('regAge').value),
+            weight: parseFloat(document.getElementById('regWeight').value),
+            height: parseFloat(document.getElementById('regHeight').value),
+            goal: document.getElementById('regGoal').value
+        };
+
+        try {
+            const token = await registerUser(userData);
+            showMessage('Registration successful!', 'success');
+            document.getElementById('userName').textContent = `Welcome, ${userData.name}!`;
+            setTimeout(showDashboard, 1000);
+        } catch (error) {
+            showMessage('Registration failed. Please try again.', 'error');
+        }
+    }
+
+    async function handleHealthEntry(event) {
+        event.preventDefault();
+
+        const entry = {
+            calories: parseInt(document.getElementById('calories').value),
+            steps: parseInt(document.getElementById('steps').value),
+            sleepHours: parseFloat(document.getElementById('sleepHours').value),
+            mood: document.getElementById('mood').value
+        };
+
+        try {
+            await saveHealthEntry(entry);
+            showMessage('Health data saved successfully!', 'success');
+            setTimeout(async () => {
+                await loadTodayStats();
+            }, 500);
+            event.target.reset();
+        } catch (error) {
+            console.error('Health entry error details:', error);
+            showMessage('Failed to save health data. Please try again.', 'error');
+        }
+    }
+
+    function logout() {
+        clearToken();
+        showAuth();
+        showMessage('You have been logged out.', 'success');
+    }
+
+    async function loadTodayStats() {
+        try {
+            const data = await getDailyHealthData();
+            console.log('Daily health data:', data);
+            if (data) {
+                document.getElementById('todayCalories').textContent = data.calories || 0;
+                document.getElementById('todaySteps').textContent = data.steps || 0;
+                document.getElementById('todaySleep').textContent = data.sleepHours || 0;
+                document.getElementById('todayMood').textContent = data.mood || '-';
+            }
+        } catch (error) {
+            console.error('Failed to load today stats:', error);
+        }
+    }
+
+    async function loadAdvice() {
+        try {
+            const advice = await getAdvice();
+            console.log('Advice response:', advice);
+            
+            let adviceText;
+            if (typeof advice === 'string') {
+                adviceText = advice;
+            } else if (advice && advice.message) {
+                adviceText = advice.message;
+            } else if (advice && advice.advice) {
+                adviceText = advice.advice;
+            } else if (advice && advice.text) {
+                adviceText = advice.text;
+            } else {
+                adviceText = JSON.stringify(advice);
+            }
+
+            document.getElementById('adviceContent').innerHTML = adviceText || 'Stay healthy and keep up the great work!';
+        } catch (error) {
+            console.error('Advice loading error:', error);
+            document.getElementById('adviceContent').innerHTML = 'Stay hydrated, eat well, and keep moving! 💪';
+        }
+    }
+
+    async function loadDashboardData() {
+        await loadTodayStats();
+        await loadAdvice();
+    }
+    
+    function initApp() {
+        if (getToken()) {
+            showDashboard();
+        } else {
+            showAuth();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initApp);
+</script>
+</body>
+</html>

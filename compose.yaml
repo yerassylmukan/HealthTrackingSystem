@@ -1,4 +1,4 @@
-﻿services:
+﻿﻿services:
   webapplication1:
     image: webapplication1
     build:
@@ -21,3 +21,20 @@
       - POSTGRES_DB=healthCheckerAppDatabase
     ports:
       - "5432:5432"
+  
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+  
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - ui
+    restart: unless-stopped
