@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPost]
+        [HttpPost]
     public async Task<ActionResult<string>> Login([FromBody] UserLoginModel userModel)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
